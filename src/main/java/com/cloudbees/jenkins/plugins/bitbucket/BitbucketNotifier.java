@@ -26,11 +26,12 @@ package com.cloudbees.jenkins.plugins.bitbucket;
 import com.cloudbees.jenkins.plugins.bitbucket.api.BitbucketBuildStatus;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import java.io.IOException;
+import javaposse.jobdsl.plugin.ContextExtensionPoint;
 
 /**
  * Abstract Bitbucket commit notifier implementation.
  */
-public abstract class BitbucketNotifier {
+public abstract class BitbucketNotifier extends ContextExtensionPoint {
 
     /**
      * Notify bitbucket about a new build status on a concrete commit.
@@ -43,6 +44,17 @@ public abstract class BitbucketNotifier {
      * @throws InterruptedException if interrupted during notification.
      */
     public abstract void notify(@CheckForNull String repoOwner, @CheckForNull String repoName, String hash, String content)
+            throws IOException, InterruptedException;
+
+    /**
+     * Notify bitbucket about a new build status on a concrete commit.
+     *
+     * @param id pull request id
+     * @param comment string to post as comment
+     * @throws IOException if there was a communication error during notification.
+     * @throws InterruptedException if interrupted during notification.
+     */
+    public abstract void postPullRequestComment(@CheckForNull Integer id, @CheckForNull String comment)
             throws IOException, InterruptedException;
 
     /**

@@ -25,12 +25,17 @@ package com.cloudbees.jenkins.plugins.bitbucket;
 
 import com.cloudbees.jenkins.plugins.bitbucket.api.BitbucketApi;
 import com.cloudbees.jenkins.plugins.bitbucket.api.BitbucketBuildStatus;
+import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import hudson.Extension;
 import java.io.IOException;
+import javaposse.jobdsl.dsl.helpers.step.StepContext;
+import javaposse.jobdsl.plugin.DslExtensionMethod;
 
 /**
  * Bitbucket notifier implementation that sends notifications as commit comments.
  */
+@Extension(optional = true)
 public class BitbucketChangesetCommentNotifier extends BitbucketNotifier {
 
     private final BitbucketApi bitbucket;
@@ -43,6 +48,13 @@ public class BitbucketChangesetCommentNotifier extends BitbucketNotifier {
     public void notify(String repoOwner, String repoName, String hash, String content)
             throws IOException, InterruptedException {
         bitbucket.postCommitComment(hash, content);
+    }
+
+    @Override
+    @DslExtensionMethod(context = StepContext.class)
+    public void postPullRequestComment( Integer id, String comment)
+            throws IOException, InterruptedException {
+        bitbucket.postPullRequestComment(id, comment);
     }
 
     @Override

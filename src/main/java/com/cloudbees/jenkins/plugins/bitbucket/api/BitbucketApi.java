@@ -116,6 +116,16 @@ public interface BitbucketApi {
     void postCommitComment(@NonNull String hash, @NonNull String comment) throws IOException, InterruptedException;
 
     /**
+     * Post a comment to a given pull request id.
+     *
+     * @param id pull request id
+     * @param comment string to post as comment
+     * @throws IOException if there was a network communications error.
+     * @throws InterruptedException if interrupted while waiting on remote communications.
+     */
+    void postPullRequestComment(@NonNull Integer id, @NonNull String comment) throws IOException, InterruptedException;
+
+    /**
      * Checks if the given path exists in the repository at the specified branch.
      *
      * @param branchOrHash the branch name or commit hash

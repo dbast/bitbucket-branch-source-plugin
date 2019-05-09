@@ -386,6 +386,25 @@ public class BitbucketCloudApiClient implements BitbucketApi {
      * {@inheritDoc}
      */
     @Override
+    public void postPullRequestComment(@NonNull Integer id, @NonNull String comment) throws IOException, InterruptedException {
+        String path = UriTemplate.fromTemplate(REPO_URL_TEMPLATE + "/commit{/hash}/build")
+                .set("owner", owner)
+                .set("repo", repositoryName)
+                .set("id", id)
+                .expand();
+            try {
+            postRequest(path, Collections.singletonList(new BasicNameValuePair("content", comment)));
+        } catch (UnsupportedEncodingException e) {
+            throw e;
+        } catch (IOException e) {
+            throw new IOException("Cannot comment on commit, url: " + path, e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean checkPathExists(@NonNull String branchOrHash, @NonNull String path)
             throws IOException, InterruptedException {
         String url = UriTemplate.fromTemplate(REPO_URL_TEMPLATE + "/src{/branchOrHash,path*}")
